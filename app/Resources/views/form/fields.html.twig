@@ -1,0 +1,222 @@
+{# app/Resources/views/form/fields.html.twig #}
+{% block integer_widget %}
+        {% set type = type|default('number') %}
+        {{ block('form_widget_simple') }}
+{% endblock %}
+{%- block textarea_widget -%}
+<div class="col-sm-10">
+    <textarea class="form-control" {{ block('widget_attributes') }}>{{ value }}</textarea>
+</div>
+{%- endblock textarea_widget -%}
+
+{#select checkbox radio 最外面的div #}
+{%- block widget_container_attributes -%}
+    {%- if id is not empty %}id="{{ id }}"  {% endif -%} class="col-sm-10"
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ translation_domain is same as(false) ? attrvalue : attrvalue|trans({}, translation_domain) }}"
+        {%- elseif attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock widget_container_attributes -%}
+
+{#这个是select 的样式 #}
+{%- block choice_widget_collapsed -%}
+
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+    <div class="col-sm-10">
+        <select class="form-control" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+            {%- if placeholder is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+            {%- endif -%}
+            {%- if preferred_choices|length > 0 -%}
+                {% set options = preferred_choices %}
+                {{- block('choice_widget_options') -}}
+                {%- if choices|length > 0 and separator is not none -%}
+                    <option disabled="disabled">{{ separator }}</option>
+                {%- endif -%}
+            {%- endif -%}
+            {%- set options = choices -%}
+            {{- block('choice_widget_options') -}}
+        </select>
+    </div>
+
+{%- endblock choice_widget_collapsed -%}
+
+{#这个是checkbox 和 radio 的样式 #}
+{%- block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }}>
+        {%- for child in form %}
+            {{- form_widget(child) -}}
+        {% endfor -%}
+    </div>
+{%- endblock choice_widget_expanded -%}
+
+{#这个是checkbox 和 radio 的样式 #}
+{%- block checkbox_widget -%}
+    <div class="checkbox col-sm-2">
+        <label>
+            <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+            {#这个是输出label值 结合checkbox #}
+            {{- label|trans({}, translation_domain) -}}
+        </label>
+    </div>
+{%- endblock checkbox_widget -%}
+{#这个是checkbox 和 radio 的样式 #}
+{%- block radio_widget -%}
+<div class="radio col-sm-2">
+    <label>
+    <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    {{- label|trans({}, translation_domain) -}}
+    </label>
+</div>
+{%- endblock radio_widget -%}
+
+
+{%- block datetime_widget -%}
+    {% if widget == 'single_text' %}
+        {{- block('form_widget_simple') -}}
+    {%- else -%}
+        <div {{ block('widget_container_attributes') }}>
+            {{- form_errors(form.date) -}}
+            {{- form_errors(form.time) -}}
+            {{- form_widget(form.date) -}}
+            {{- form_widget(form.time) -}}
+        </div>
+    {%- endif -%}
+{%- endblock datetime_widget -%}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <div class="col-sm-10" {% for v in attr %}{% if v =='editor' %} id="editor" {{ block('widget_attributes') }} {% endif %}{% endfor %}>
+        {#根据attr输出判断#}
+       {% if 'editor' not in attr %}
+        <input type="{{ type }}" class="form-control" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %} />
+        {% endif %}
+    </div>
+{%- endblock form_widget_simple -%}
+
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        <label class="col-sm-2 control-label" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {%- if translation_domain is same as(false) -%}
+            {{- label -}}
+        {%- else -%}
+            {{- label|trans({}, translation_domain) -}}
+        {%- endif -%}
+        </label>
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{%- block form_start -%}
+    {%- do form.setMethodRendered() -%}
+    {% set method = method|upper %}
+    {%- if method in ["GET", "POST"] -%}
+        {% set form_method = method %}
+    {%- else -%}
+        {% set form_method = "POST" %}
+    {%- endif -%}
+    <form class="form-horizontal" style="margin-top: 20px;" name="{{ name }}" method="{{ form_method|lower }}"{% if action != '' %} action="{{ action }}"{% endif %}{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}{% if multipart %} enctype="multipart/form-data"{% endif %}>
+    {%- if form_method != method -%}
+        <input type="hidden" name="_method" value="{{ method }}" />
+    {%- endif -%}
+{%- endblock form_start -%}
+
+{%- block form_row -%}
+    <div class="form-group">
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+
+{%- block button_widget -%}
+<div class="box-footer">
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+    <div class="pull-right">
+        <button type="{{ type|default('button') }}" {{ block('button_attributes') }} class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</button>
+    </div>
+    </div>
+    {%- endblock button_widget -%}
+
+{#
+<form class="form-horizontal" action="{{ path('category_form_update1')}}" method="POST">
+    <div class="box-body">
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">分类名称</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name='name' value="{{ res.name }}" placeholder="分类名称">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">是否可用</label>
+            <div class="col-sm-10">
+
+                <div class="radio col-sm-2">
+                    <label>
+                        <input type="radio" name="status" id="optionsRadios1" value="1" {% if res.status == 1 %} checked="" {% endif %} >
+                        启用
+                    </label>
+                </div>
+
+                <div class="radio col-sm-2">
+                    <label>
+                        <input type="radio" name="status" id="optionsRadios2" value="0" {% if res.status == 0 %} checked="" {% endif %}>
+                        禁用
+                    </label>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- /.box-body -->
+        <!-- <div class="box-footer">
+            <button type="submit" class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-info pull-right">Sign in</button>
+        </div> -->
+        <div class="box-footer">
+            <div class="pull-right">
+                <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-repeat"></i> 取消</button>
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-saved"></i> 保存</button>
+            </div>
+
+        </div>
+        <!-- /.box-footer -->
+    </div>
+</form>#}

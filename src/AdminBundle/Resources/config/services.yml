@@ -1,0 +1,8 @@
+services:
+#    admin.example:
+#        class: AdminBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    admin.twig.extension:
+        class: AdminBundle\Twig\Extension       
+        tags:
+            - { name: extension }

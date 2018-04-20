@@ -1,0 +1,26 @@
+
+.page{text-align: center;font-size: 0; margin-top: 20px;} 
+.page span{
+	border: 1px solid #ccc;
+    background: #dedede;
+    width: 27px;
+    height: 27px;
+    display: inline-block;
+    font-size: 14px;
+    margin: 0 4px;
+	line-height:27px;
+	}
+.page a,.page .current{
+	font-size: 14px;
+    border: 1px solid #ccc;
+    width: 27px;
+    height: 27px;
+    display: inline-block;
+    color: #666;
+	margin:0 4px;
+	line-height:27px;
+}
+.page .current{
+	border: 1px solid #ccc;
+    background: #dedede;
+}

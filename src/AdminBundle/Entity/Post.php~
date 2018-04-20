@@ -1,0 +1,51 @@
+<?php
+namespace  AdminBundle\Entity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert ;
+/**
+ * Class Category
+ * @package AdminBundle\Entity
+ * @ORM\Entity
+ * @ORM\Table(name="post")
+ */
+class Post
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer",length=6)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Article")
+     * @ORM\JoinColumn(name="article",referencedColumnName="id")
+     */
+    private $article;
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="userid",referencedColumnName="id")
+     */
+    private $userid;
+    /**
+     * @ORM\Column(type="integer",length=6)
+     */
+    private $toid;
+    /**
+     * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     */
+    private $content;
+    /**
+     * @ORM\Column(type="smallint",length=4)
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="integer",length=11,name="created_at")
+     */
+    private  $createdAt;
+
+
+
+}

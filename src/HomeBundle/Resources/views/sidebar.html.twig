@@ -1,0 +1,60 @@
+<div id="sidebar" class="four columns">
+
+   			<div class="widget widget_search">
+                  <h3>Search</h3> 
+                  <form action="#">
+
+                     <input type="text" value="Search here..." onblur="if(this.value == '') { this.value = 'Search here...'; }" onfocus="if (this.value == 'Search here...') { this.value = ''; }" class="text-search">
+                     <input type="submit" value="" class="submit-search">
+
+                  </form>
+               </div>
+
+   			<div class="widget widget_categories group">
+   				<h3>所有分类</h3> 
+   				<ul>
+					{% for value in category %}
+					<li><a href="{{ path('home',{cate:value.title}) }}" title="">{{ value.name }}</a> ({{ value.count }})</li>
+					{% endfor %}		
+					</ul>
+				</div>
+
+				<div class="widget widget_text group">
+					<h3>博客说明</h3>
+
+   				<div class='pull-quote'>
+				<blockquote>
+				此博客是基于symfony2.8框架开发，这也是我刚接触symfony,被它的功能深深吸引；
+				由于是刚接触，很多功能开发还需要逐步完善，仅仅是练习学习框架而已，不少瑕疵的地方还需各位大神指教！以促进我进步，谢谢！
+				</blockquote>
+				</div>
+
+   			</div>
+
+   			<div class="widget widget_tags">
+               <h3>热门标签</h3>
+
+               <div class="tagcloud group">
+                	{% for value in tag %}
+					{% if current == value.title %}
+					<a href="{{ path('home',{cate:value.title})}}" style="background-color:#93B876;color:#fff">{{ value.name }}</a>
+					{% else %}
+					<a href="{{ path('home',{cate:value.title})}}">{{ value.name }}</a>
+					{% endif %}
+					{% endfor %}
+               </div>
+                  
+            </div>
+
+            <div class="widget widget_popular">
+               <h3>热门文章.</h3>
+
+               <ul class="link-list">
+			    {% for article in pop_article %}
+                  <li><a href="{{ path('blog_detail',{id:article.id}) }}">{{ article.title }}</a></li>
+                {% endfor %}
+               </ul>
+                  
+            </div>
+   			
+   		</div> <!-- end sidebar -->

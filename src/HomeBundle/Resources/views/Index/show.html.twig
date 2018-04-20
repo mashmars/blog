@@ -1,0 +1,158 @@
+{% extends 'HomeBundle::layout.html.twig' %}
+{% block main %}
+   		<div id="main" class="eight columns">
+
+   			<article class="entry">
+
+					<header class="entry-header">
+
+						<h2 class="entry-title">
+							{{ article.title }}
+						</h2> 				 
+				
+						<div class="entry-meta">
+							<ul>
+								<li>{{ article.updatedAt|date}}</li>
+								<span class="meta-sep">&bull;</span>							
+								<li>
+									<a href="#" title="标签" rel="tag">{{ article.tagId.name }}</a>
+									<!--<a href="#" title="" rel="category tag">Ghost</a>  -->
+								</li>
+								<span class="meta-sep">&bull;</span>
+								<li>
+									<a href="#" title="分类" rel="category">{{ article.categoryId.name }}</a>
+								</li>
+							</ul>
+						</div> 
+				 
+					</header> 
+				
+					
+					<div class="entry-content">
+						<p class="lead">{{ article.descript }}</p>
+
+						{{ article.content|raw }}
+						</div>
+
+					<p class="tags">
+  			         <span>所属标签 </span>:
+  				      <a href="{{ path('home',{cate:current}) }}">{{ article.tagId.name }}</a>
+  			       </p> 
+
+  			       <ul class="post-nav group">
+  			            <li class="prev">
+						{% if prev %}
+						<a rel="prev" href="{{ path('blog_detail',{id:prev.0.id}) }}"><strong>上一篇</strong> {{ prev.0.title }}</a>
+						{% else %}
+						<a rel="prev" href="javascript:;"><strong>上一篇</strong> 已经是第一篇了 </a>
+						{% endif %}
+						</li>
+  				        <li class="next">
+						{% if next %}
+						<a rel="next" href="{{ path('blog_detail',{id:next.0.id}) }}"><strong>下一篇</strong> {{ next.0.title }}</a>
+						{% else %}
+						<a rel="next" href="javascript:;"><strong>下一篇</strong> 已经是最后一篇了 </a>
+						{% endif %}
+						</li>
+  			        </ul>
+
+				</article>
+
+				<!-- Comments
+            ================================================== -->
+            <div id="comments">
+			<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="{{ id }}" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cytzrwiq2'; 
+var conf = 'prod_b3aa2750c47e2baa8218d527f628697d'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+
+               <h3>5个评论</h3>
+
+               <!-- commentlist -->
+               <ol class="commentlist">
+				{% for post in paginate %}
+                  <li class="depth-1">
+
+                     <div class="avatar">
+                        <img width="50" height="50" class="avatar" src="/public/home/images/user-01.png" alt="">
+                     </div>
+
+                     <div class="comment-content">
+
+	                     <div class="comment-info">
+	                        <cite>{{ post.userid.username }}</cite>
+
+	                        <div class="comment-meta">
+	                           <time class="comment-time" datetime="{{ post.createdAt|date }}">{{ post.createdAt|date }}</time>
+	                           <span class="sep">/</span><a class="reply" href="javascript:;">Yes</a>
+	                        </div>
+	                     </div>
+
+	                     <div class="comment-text">
+	                        <p>{{ post.content }}</p>
+	                     </div>
+
+	                  </div>
+
+                  </li>
+				{% endfor %}
+                 
+
+               </ol> <!-- Commentlist End -->
+
+				<div>
+				{{ knp_pagination_render(paginate) }}
+				</div>
+               <!-- respond -->
+               <div class="respond">
+
+                  <h3>评论</h3>
+
+                  <!-- form -->
+                  <!--<form name="contactForm" id="contactForm" method="post" action="">-->
+				  {{ form_start(form,{'attr': {'novalidate': 'novalidate'}}) }}
+  					<fieldset>
+
+                    <div class="group">
+						<!--<label for="cName">姓名 <span class="required">*</span></label>
+						<input name="cName" type="text" id="cName" size="35" value="" />-->
+						{{ form_row(form.username) }}
+                    </div>
+
+                    <div class="group">
+  						<!--<label for="cEmail">邮箱 <span class="required">*</span></label>
+  						<input name="cEmail" type="text" id="cEmail" size="35" value="" />-->
+						{{ form_row(form.email) }}
+                    </div>
+
+                    <div class="group">
+  						<!--<label for="cWebsite">你的站点</label>
+  						<input name="cWebsite" type="text" id="cWebsite" size="35" value="" />-->
+						{{ form_row(form.website) }}
+                    </div>
+
+                    <div class="message group">
+                       <!-- <label  for="cMessage">Message <span class="required">*</span></label>
+                        <textarea name="cMessage"  id="cMessage" rows="10" cols="50" ></textarea>-->
+						{{ form_row(form.content) }}
+                    </div>
+
+                    <!--<button type="submit" class="submit">提&nbsp;&nbsp;交</button>-->
+					{{ form_row(form.submit) }}
+  					</fieldset>
+					{{ form_end(form) }}
+  				    <!--</form>--> <!-- Form End -->
+
+               </div> <!-- Respond End -->
+
+            </div>  <!-- Comments End -->		
+   			
+
+   		</div> <!-- main End -->
+
+   	{% endblock %}

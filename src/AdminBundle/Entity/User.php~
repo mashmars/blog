@@ -1,0 +1,49 @@
+<?php
+namespace  AdminBundle\Entity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert ;
+/**
+ * Class Category
+ * @package AdminBundle\Entity
+ * @ORM\Entity
+ * @ORM\Table(name="user")
+ */
+class User
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer",length=6)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    /**
+     * @ORM\Column(type="string",length=100)
+     * @Assert\NotBlank()
+     */
+    private $username;
+    /**
+     * @ORM\Column(type="string",length=30)
+     * @Assert\NotBlank()
+     * @Assert\Email
+     */
+    private $email;
+    /**
+     * @ORM\Column(type="string",length=100)
+     */
+    private $website;
+    /**
+     * @ORM\Column(type="integer",length=11,name="created_at")
+     */
+    private $createdAt;
+    /**
+     * @ORM\Column(type="smallint",length=2)
+     *
+     */
+    private $status;
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $content;
+
+    
+}

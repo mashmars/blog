@@ -1,0 +1,40 @@
+{% extends 'HomeBundle::layout.html.twig' %}
+
+{% block main %}
+  
+   		<div id="main" class="eight columns">
+			{% for article in paginator %}
+	   		<article class="entry">
+
+					<header class="entry-header">
+
+						<h2 class="entry-title">
+							<a href="{{ path('blog_detail',{id:article.id}) }}" title="{{ article.title }}">{{ article.title }}</a>
+						</h2> 				 
+					
+						<div class="entry-meta">
+							<ul>
+								<li>{{ article.createdAt|date }}</li>
+								<span class="meta-sep">&bull;</span>								
+								<li><a href="#" title="" rel="tag">{{ article.tagId.name }}</a></li>
+								<span class="meta-sep">&bull;</span>
+								<li><a href="#" title="" rel="category">{{ article.categoryId.name }}</a></li>
+							</ul>
+						</div> 
+					 
+					</header> 
+					
+					<div class="entry-content">
+						{{ article.descript }}
+					</div> 
+
+				</article> <!-- end entry -->
+
+				{% endfor %}
+						
+			<div>
+			{{ knp_pagination_render(paginator) }}
+			</div>
+   		</div> <!-- end main -->
+
+{% endblock %}   

@@ -1,0 +1,52 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+  {% block main %}
+  <!-- Content Wrapper. Contains page content -->
+
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        主页
+        <small>基本</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Here</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+	 
+		<div class="row">
+		
+			<div class="col-md-12">
+			
+				<div class="box box-primary">
+				</div>
+				<div class="box-header">
+				  <h3 class="box-title">增加分类</h3>
+				  <div class="box-tools">
+					保存信息
+				  </div>
+				</div>
+				<div class="box box-default">
+				{% form_theme form 'form/fields.html.twig' %}
+				
+					{{ form_start(form) }}
+					{{ form_widget(form)}}
+					{{ form_end(form) }}
+				</div>
+			<!-- /.col -->
+			</div>
+		</div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  
+<!-- ./wrapper -->
+{% endblock %}
+
